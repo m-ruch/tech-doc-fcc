@@ -5,218 +5,146 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./styles.css" />
-    <title>JS Documentation</title>
+    <title>Ethereum Virtual Machine Documentation</title>
 </head>
 <body>
     <nav id="navbar">
-        <header>JS Documentation</header>
+        <header>Ethereum Virtual Machine Documentation</header>
         <ul>
-            <li><a class="nav-link" href="#Introduction">Introduction</a></li>
-            <li><a class="nav-link" href="#What_you_should_already_know">What you should already know</a></li>
-            <li><a class="nav-link" href="#JavaScript_and_Java">JavaScript and Java</a></li>
-            <li><a class="nav-link" href="#Hello_world">Hello world</a></li>
-            <li><a class="nav-link" href="#Variables">Variables</a></li>
-            <li><a class="nav-link" href="#Declaring_variables">Declaring variables</a></li>
-            <li><a class="nav-link" href="#Variable_scope">Variable scope</a></li>
-            <li><a class="nav-link" href="#Global_variables">Global variables</a></li>
-            <li><a class="nav-link" href="#Constants">Constants</a></li>
-            <li><a class="nav-link" href="#Data_types">Data types</a></li>
-            <li><a class="nav-link" href="#if...else_statement">if...else statement</a></li>
-            <li><a class="nav-link" href="#while_statement">while statement</a></li>
-            <li><a class="nav-link" href="#Function_declarations">Function declarations</a></li>
+            <li><a class="nav-link" href="#Overview">Overview</a></li>
+            <li><a class="nav-link" href="#Accounts">Accounts</a></li>
+            <li><a class="nav-link" href="#Transactions">Transactions</a></li>
+            <li><a class="nav-link" href="#Gas">Gas</a></li>
+            <li><a class="nav-link" href="#Storage_Memory_and_the_Stack">Storage Memory and the Stack</a></li>
+            <li><a class="nav-link" href="#Instruction_Set">Instruction Set</a></li>
+            <li><a class="nav-link" href="#Message_Calls">Message Calls</a></li>
+            <li><a class="nav-link" href="#Delegatecall">Delegatecall</a></li>
+            <li><a class="nav-link" href="#Logs">Logs</a></li>
+            <li><a class="nav-link" href="#Create">Create</a></li>
+            <li><a class="nav-link" href="#Deactivate_and_Selfdestruct">Deactivate and Selfdestruct</a></li>
+            <li><a class="nav-link" href="#Precompiled_Contracts">Precompiled Contracts</a></li>
             <li><a class="nav-link" href="#Reference">Reference</a></li>
         </ul>
     </nav>
 
     <main id="main-doc">
-        <section class="main-section" id="Introduction">
-            <header>Introduction</header>
+        <section class="main-section" id="Overview">
+            <header>Overview</header>
             <article>
-                <p>JavaScript is a cross-platform, object-oriented scripting language. It is a small and lightweight language. Inside a host environment (for example, a web browser), JavaScript can be connected to the objects of its environment to provide programmatic control over them.</p>
-                <p>JavaScript contains a standard library of objects, such as Array, Date, and Math, and a core set of language elements such as operators, control structures, and statements. Core JavaScript can be extended for a variety of purposes by supplementing it with additional objects; for example:</p>
-                <ul>
-                    <li>Client-side JavaScript extends the core language by supplying objects to control a browser and its Document Object Model (DOM). For example, client-side extensions allow an application to place elements on an HTML form and respond to user events such as mouse clicks, form input, and page navigation.</li>
-                    <li>Server-side JavaScript extends the core language by supplying objects relevant to running JavaScript on a server. For example, server-side extensions allow an application to communicate with a database, provide continuity of information from one invocation to another of the application, or perform file manipulations on a server.</li>
-                </ul>
+                <p>The Ethereum Virtual Machine or EVM is the runtime environment for smart contracts in Ethereum. It is not only sandboxed but actually completely isolated, which means that code running inside the EVM has no access to network, filesystem or other processes. Smart contracts even have limited access to other smart contracts.</p>
             </article>
         </section>
 
-        <section class="main-section" id="What_you_should_already_know">
-            <header>What you should already know</header>
+        <section class="main-section" id="Accounts">
+            <header>Accounts</header>
             <article>
-                <p>This guide assumes you have the following basic background:</p>
-                <ul>
-                    <li>A general understanding of the Internet and the World Wide Web(WWW).</li>
-                    <li>Good working knowledge of HyperText Markup Language (HTML).</li>
-                    <li>Some programming experience. If you are new to programming, try one of the tutorials linked on the main page about JavaScript.</li>
-                </ul>
-              </article>
-        </section>
-
-        <section class="main-section" id="JavaScript_and_Java">
-            <header>JavaScript and Java</header>
-            <article>
-                <p>JavaScript and Java are similar in some ways but fundamentally different in some others. The JavaScript language resembles Java but does not have Java's static typing and strong type checking. JavaScript follows most Java expression syntax, naming conventions and basic control-flow constructs which was the reason why it was renamed from LiveScript to JavaScript.</p>
-                <p>In contrast to Java's compile-time system of classes built by declarations, JavaScript supports a runtime system based on a small number of data types representing numeric, Boolean, and string values. JavaScript has a prototype-based object model instead of the more common class-based object model. The prototype-based model provides dynamic inheritance; that is, what is inherited can vary for individual objects. JavaScript also supports functions without any special declarative requirements. Functions can be properties of objects, executing as loosely typed methods.</p>
-                <p>JavaScript is a very free-form language compared to Java. You do not have to declare all variables, classes, and methods. You do not have to be concerned with whether methods are public, private, or protected, and you do not have to implement interfaces. Variables, parameters, and function return types are not explicitly typed.</p>
+                <p>There are two kinds of accounts in Ethereum which share the same address space: <b>External accounts</b> that are controlled by public-private key pairs (i.e. humans) and <b>contract accounts</b> which are controlled by the code stored together with the account.</p>
+                <p>The address of an external account is determined from the public key while the address of a contract is determined at the time the contract is created (it is derived from the creator address and the number of transactions sent from that address, the so-called “nonce”).</p>
+                <p>Regardless of whether or not the account stores code, the two types are treated equally by the EVM.</p>
+                <p>Every account has a persistent key-value store mapping 256-bit words to 256-bit words called <b>storage</b>.</p>
+                <p>Furthermore, every account has a <b>balance</b> in Ether. In “Wei” to be exact, <code>1 ether</code> is <code>10**18 wei</code> which can be modified by sending transactions that include Ether.</p>
             </article>
         </section>
 
-        <section class="main-section" id="Hello_world">
-            <header>Hello world</header>
+        <section class="main-section" id="Transactions">
+            <header>Transactions</header>
             <article>
-                To get started with writing JavaScript, open the Scratchpad and write your first "Hello world" JavaScript code:
-                <code>function greetMe(yourName) { alert("Hello " + yourName); }
-                greetMe("World");</code>
-            Select the code in the pad and hit Ctrl+R to watch it unfold in your browser!
+                <p>A transaction is a message that is sent from one account to another account (which might be the same or empty, see below). It can include binary data (which is called “payload”) and Ether.</p>
+                <p>If the target account contains code, that code is executed and the payload is provided as input data.</p>
+                <p>If the target account is not set (the transaction does not have a recipient or the recipient is set to <code>null</code>), the transaction creates a new contract. As already mentioned, the address of that contract is not the zero address but an address derived from the sender and its number of transactions sent (the “nonce”). The payload of such a contract creation transaction is taken to be EVM bytecode and executed. The output data of this execution is permanently stored as the code of the contract. This means that in order to create a contract, you do not send the actual code of the contract, but in fact code that returns that code when executed.</p>
             </article>
         </section>
 
-        <section class="main-section" id="Variables">
-            <header>Variables</header>
+        <section class="main-section" id="Gas">
+            <header>Gas</header>
             <article>
-                <p>You use variables as symbolic names for values in your application. The names of variables, called identifiers, conform to certain rules.</p>
-                <p>A JavaScript identifier must start with a letter, underscore (_), or dollar sign ($); subsequent characters can also be digits (0-9). Because JavaScript is case sensitive, letters include the characters "A" through "Z" (uppercase) and the characters "a" through "z" (lowercase).</p>
-                <p>You can use ISO 8859-1 or Unicode letters such as å and ü in identifiers. You can also use the Unicode escape sequences as characters in identifiers. Some examples of legal names are Number_hits, temp99, and _name.</p>
+                <p>Upon creation, each transaction is charged with a certain amount of <b>gas</b> that has to be paid for by the originator of the transaction: <code>tx.origin</code> While the EVM executes the transaction, the gas is gradually depleted according to specific rules. If the gas is used up at any point (i.e. it would be negative), an out-of-gas exception is triggered, which ends execution and reverts all modifications made to the state in the current call frame.</p>
+                <p>This mechanism incentivizes economical use of EVM execution time and also compensates EVM executors (i.e. miners / stakers) for their work. Since each block has a maximum amount of gas, it also limits the amount of work needed to validate a block.</p>
+                <p>The <b>gas price</b> is a value set by the originator of the transaction, who has to pay <code>gas_price * gas</code> up front to the EVM executor. If some gas is left after execution, it is refunded to the transaction originator. In case of an exception that reverts changes, already used up gas is not refunded.</p>
+                <p>Since EVM executors can choose to include a transaction or not, transaction senders cannot abuse the system by setting a low gas price.</p>
             </article>
         </section>
 
-        <section class="main-section" id="Declaring_variables">
-            <header>Declaring variables</header>
+        <section class="main-section" id="Storage_Memory_and_the_Stack">
+            <header>Storage Memory and the Stack</header>
             <article>
-                <p>You can declare a variable in three ways:</p>
-                <p>With the keyword var. For example, <code>var x = 42.</code> This syntax can be used to declare both local and global variables.</p>
-                <p>By simply assigning it a value. For example,
-                <code>x = 42.</code> This always declares a global variable. It generates a strict JavaScript warning. You shouldn't use this variant.</p>
-                <p>With the keyword let. For example,<code> let y = 13.</code> Thissyntax can be used to declare a block scope local variable. See Variable scope below.</p>
-            </article>
-        </section>
-
-        <section class="main-section" id="Variable_scope">
-            <header>Variable scope</header>
-            <article>
-                <p>When you declare a variable outside of any function, it is called a global variable, because it is available to any other code in the current document. When you declare a variable within a function, it is called a local variable, because it is available only within that function.</p>
-                <p>JavaScript before ECMAScript 2015 does not have block statement scope; rather, a variable declared within a block is local to the function (or global scope) that the block resides within. For example the following code will log 5, because the scope of x is the function (or global context) within which x is declared, not the block, which in this case is an if statement.</p>
-                <code>if (true) { var x = 5; } console.log(x); // 5</code>
-                <p>This behavior changes, when using the let declaration introduced in ECMAScript 2015.</p>
-                <code>if (true) { let y = 5; } console.log(y); // ReferenceError: y is
-                not defined</code>
-            </article>
-        </section>
-
-        <section class="main-section" id="Global_variables">
-            <header>Global variables</header>
-            <article>
-                <p>Global variables are in fact properties of the global object. In web pages the global object is window, so you can set and access global variables using the window.variable syntax.</p>
-                <p>Consequently, you can access global variables declared in one window or frame from another window or frame by specifying the window or frame name. For example, if a variable called phoneNumber is declared in a document, you can refer to this variable from an iframe as parent.phoneNumber.</p>
-            </article>
-        </section>
-
-        <section class="main-section" id="Constants">
-            <header>Constants</header>
-            <article>
-                <p>You can create a read-only, named constant with the const keyword. The syntax of a constant identifier is the same as for a variable identifier: it must start with a letter, underscore or dollar sign and can contain alphabetic, numeric, or underscore characters.</p>
-                <code>const PI = 3.14;</code>
-                <p>
-                  A constant cannot change value through assignment or be re-declared
-                  while the script is running. It has to be initialized to a value.
-                </p>
-                <p>A constant cannot change value through assignment or be re-declared while the script is running. It has to be initialized to a value.</p>
-                <p>The scope rules for constants are the same as those for let block scope variables. If the const keyword is omitted, the identifier is assumed to represent a variable.</p>
-                <code>// THIS WILL CAUSE AN ERROR function f() {}; const f = 5; // THIS
-                WILL CAUSE AN ERROR ALSO function f() { const g = 5; var g;
-                //statements }</code>
-                <p>However, object attributes are not protected, so the following statement is executed without problems.</p>
-                <code>const MY_OBJECT = {"key": "value"}; MY_OBJECT.key =
-                "otherValue";</code>
-            </article>
-        </section>
-
-        <section class="main-section" id="Data_types">
-            <header>Data types</header>
-            <article>
-                <p>The latest ECMAScript standard defines seven data types:</p>
-                <ul>
-                    <li>Six data types that are primitives:</li>
+                <p>The Ethereum Virtual Machine has three areas where it can store data:</p>
+                <ol>
+                    <li>storage</li>
                         <ul>
-                            <li>Boolean. true and false.</li>
-                            <li>null. A special keyword denoting a null value. Because JavaScript is case-sensitive, null is not the same as Null, NULL, or any other variant.</li>
-                            <li>undefined. A top-level property whose value is undefined.</li>
-                            <li>Number. 42 or 3.14159.</li>
-                            <li>String. "Howdy"</li>
-                            <li>Symbol (new in ECMAScript 2015). A data type whose instances are unique and immutable.</li>
+                            <li>Each account has a data area called <b>storage</b>, which is persistent between function calls and transactions. Storage is a key-value store that maps 256-bit words to 256-bit words. It is not possible to enumerate storage from within a contract, it is comparatively costly to read, and even more to initialise and modify storage. Because of this cost, you should minimize what you store in persistent storage to what the contract needs to run. Store data like derived calculations, caching, and aggregates outside of the contract. A contract can neither read nor write to any storage apart from its own.</li>
                         </ul>
-                    <li>and Object</li>
-                </ul>
-                <p>Although these data types are a relatively small amount, they enable you to perform useful functions with your applications. Objects and functions are the other fundamental elements in the language. You can think of objects as named containers for values, and functions as procedures that your application can perform.</p>
+                    <li>memory</li>
+                        <ul>
+                            <li>The second data area is called <b>memory</b>, of which a contract obtains a freshly cleared instance for each message call. Memory is linear and can be addressed at byte level, but reads are limited to a width of 256 bits, while writes can be either 8 bits or 256 bits wide. Memory is expanded by a word (256-bit), when accessing (either reading or writing) a previously untouched memory word (i.e. any offset within a word). At the time of expansion, the cost in gas must be paid. Memory is more costly the larger it grows (it scales quadratically).</li>
+                        </ul>
+                    <li>stack</li>
+                        <ul>
+                            <li>The EVM is not a register machine but a stack machine, so all computations are performed on a data area called the <b>stack</b>. It has a maximum size of 1024 elements and contains words of 256 bits. Access to the stack is limited to the top end in the following way: It is possible to copy one of the topmost 16 elements to the top of the stack or swap the topmost element with one of the 16 elements below it. All other operations take the topmost two (or one, or more, depending on the operation) elements from the stack and push the result onto the stack. Of course it is possible to move stack elements to storage or memory in order to get deeper access to the stack, but it is not possible to just access arbitrary elements deeper in the stack without first removing the top of the stack.</li>
+                        </ul>
+                </ol>
             </article>
         </section>
 
-        <section class="main-section" id="if...else_statement">
-            <header>if...else statement</header>
+        <section class="main-section" id="Instruction_Set">
+            <header>Instruction Set</header>
             <article>
-                <p>Use the if statement to execute a statement if a logical condition is true. Use the optional else clause to execute a statement if the condition is false. An if statement looks as follows:</p>
-                <code>if (condition) { statement_1; } else { statement_2; }</code>
-                <p>condition can be any expression that evaluates to true or false. See Boolean for an explanation of what evaluates to true and false. If condition evaluates to true, statement_1 is executed; otherwise, statement_2 is executed. statement_1 and statement_2 can be any statement, including further nested if statements.</p>
-                <p>You may also compound the statements using else if to have multiple conditions tested in sequence, as follows:</p>
-                <code>if (condition_1) { statement_1; } else if (condition_2) {
-                statement_2; } else if (condition_n) { statement_n; } else {
-                statement_last; }</code>
-                <p>In the case of multiple conditions only the first logical condition which evaluates to true will be executed. To execute multiple statements, group them within a block statement ({ ... }) . In general, it's good practice to always use block statements, especially when nesting if statements:</p>
-                <code>if (condition) { statement_1_runs_if_condition_is_true;
-                statement_2_runs_if_condition_is_true; } else {
-                statement_3_runs_if_condition_is_false;
-                statement_4_runs_if_condition_is_false; }</code>
-                <p>It is advisable to not use simple assignments in a conditional expression, because the assignment can be confused with equality when glancing over the code. For example, do not use the following code:</p>
-                <code>if (x = y) { /* statements here */ }</code> 
-                <p>If you need to use an assignment in a conditional expression, a common practice is to put additional parentheses around the assignment. For example:</p>
-                <code>if ((x = y)) { /* statements here */ }</code>
+                <p>The instruction set of the EVM is kept minimal in order to avoid incorrect or inconsistent implementations which could cause consensus problems. All instructions operate on the basic data type, 256-bit words or on slices of memory (or other byte arrays). The usual arithmetic, bit, logical and comparison operations are present. Conditional and unconditional jumps are possible. Furthermore, contracts can access relevant properties of the current block like its number and timestamp.</p>
             </article>
         </section>
 
-        <section class="main-section" id="while_statement">
-            <header>while statement</header>
+        <section class="main-section" id="Message_Calls">
+            <header>Message Calls</header>
             <article>
-                <p>A while statement executes its statements as long as a specified condition evaluates to true. A while statement looks as follows:</p>
-                <code>while (condition) statement</code> 
-                <p>If the condition becomes false, statement within the loop stops executing and control passes to the statement following the loop.</p>
-                <p>The condition test occurs before statement in the loop is executed. If the condition returns true, statement is executed and the condition is tested again. If the condition returns false, execution stops and control is passed to the statement following while.</p>
-                <p>To execute multiple statements, use a block statement ({ ... }) to group those statements.</p>
-                <p>Example:</p>
-                <p>The following while loop iterates as long as n is less than three:</p>
-                <code>var n = 0; var x = 0; while (n &lt; 3) { n++; x += n; }</code>
-                <p>With each iteration, the loop increments n and adds that value to x. Therefore, x and n take on the following values:</p>
-                <ul>
-                    <li>After the first pass: n = 1 and x = 1</li>
-                    <li>After the second pass: n = 2 and x = 3</li>
-                    <li>After the third pass: n = 3 and x = 6</li>
-                </ul>
-                <p>After completing the third pass, the condition n < 3 is no longer true, so the loop terminates.</p>
+                <p>Contracts can call other contracts or send Ether to non-contract accounts by the means of message calls. Message calls are similar to transactions, in that they have a source, a target, data payload, Ether, gas and return data. In fact, every transaction consists of a top-level message call which in turn can create further message calls.</p>
+                <p>A contract can decide how much of its remaining gas should be sent with the inner message call and how much it wants to retain. If an out-of-gas exception happens in the inner call (or any other exception), this will be signaled by an error value put onto the stack. In this case, only the gas sent together with the call is used up. In Solidity, the calling contract causes a manual exception by default in such situations, so that exceptions “bubble up” the call stack.</p>
+                <p>As already said, the called contract (which can be the same as the caller) will receive a freshly cleared instance of memory and has access to the call payload - which will be provided in a separate area called the <b>calldata</b>. After it has finished execution, it can return data which will be stored at a location in the caller’s memory preallocated by the caller. All such calls are fully synchronous.</p>
+                <p>Calls are <b>limited</b> to a depth of 1024, which means that for more complex operations, loops should be preferred over recursive calls. Furthermore, only 63/64th of the gas can be forwarded in a message call, which causes a depth limit of a little less than 1000 in practice.</p>
             </article>
         </section>
 
-        <section class="main-section" id="Function_declarations">
-            <header>Function declarations</header>
+        <section class="main-section" id="Delegatecall">
+            <header>Delegatecall</header>
             <article>
-                <p>A function definition (also called a function declaration, or function statement) consists of the function keyword, followed by:</p>
-                <ul>
-                    <li>The name of the function.</li>
-                    <li>A list of arguments to the function, enclosed in parentheses and separated by commas.</li>
-                    <li>The JavaScript statements that define the function, enclosed in curly brackets, { }.</li>
-                </ul>
-                <p>For example, the following code defines a simple function named square:</p>
-                <code>function square(number) { return number * number; }</code>
-                <p>The function square takes one argument, called number. The function consists of one statement that says to return the argument of the function (that is, number) multiplied by itself. The return statement specifies the value returned by the function.</p>
-                <code>return number * number;</code>
-                <p>Primitive parameters (such as a number) are passed to functions by value; the value is passed to the function, but if the function changes the value of the parameter, this change is not reflected globally or in the calling function.</p>
+                <p>There exists a special variant of a message call, named delegatecall which is identical to a message call apart from the fact that the code at the target address is executed in the context (i.e. at the address) of the calling contract and <code>msg.sender</code> and <code>msg.value</code> do not change their values.</p>
+                <p>This means that a contract can dynamically load code from a different address at runtime. Storage, current address and balance still refer to the calling contract, only the code is taken from the called address.</p>
+                <p>This makes it possible to implement the “library” feature in Solidity: Reusable library code that can be applied to a contract’s storage, e.g. in order to implement a complex data structure.</p>
             </article>
         </section>
-        
+
+        <section class="main-section" id="Logs">
+            <header>Logs</header>
+            <article>
+                <p>It is possible to store data in a specially indexed data structure that maps all the way up to the block level. This feature called logs is used by Solidity in order to implement events. Contracts cannot access log data after it has been created, but they can be efficiently accessed from outside the blockchain. Since some part of the log data is stored in bloom filters, it is possible to search for this data in an efficient and cryptographically secure way, so network peers that do not download the whole blockchain (so-called “light clients”) can still find these logs.</p>
+            </article>
+        </section>
+
+        <section class="main-section" id="Create">
+            <header>Create</header>
+            <article>
+                <p>Contracts can even create other contracts using a special opcode (i.e. they do not simply call the zero address as a transaction would). The only difference between these create calls and normal message calls is that the payload data is executed and the result stored as code and the caller / creator receives the address of the new contract on the stack.</p>
+            </article>
+        </section>
+
+        <section class="main-section" id="Deactivate_and_Selfdestruct">
+            <header>Deactivate and Selfdestruct</header>
+            <article>
+                <p>The only way to remove code from the blockchain is when a contract at that address performs the <code>selfdestruct</code> operation. The remaining Ether stored at that address is sent to a designated target and then the storage and code is removed from the state. Removing the contract in theory sounds like a good idea, but it is potentially dangerous, as if someone sends Ether to removed contracts, the Ether is forever lost.</p>
+                <p>If you want to deactivate your contracts, you should instead <b>disable</b> them by changing some internal state which causes all functions to revert. This makes it impossible to use the contract, as it returns Ether immediately.</p>
+            </article>
+        </section>
+
+        <section class="main-section" id="Precompiled_Contracts">
+            <header>Precompiled Contracts</header>
+            <article>
+                <p>There is a small set of contract addresses that are special: The address range between <code>1</code> and (including) <code>8</code> contains “precompiled contracts” that can be called as any other contract but their behaviour (and their gas consumption) is not defined by EVM code stored at that address (they do not contain code) but instead is implemented in the EVM execution environment itself.</p>
+                <p>Different EVM-compatible chains might use a different set of precompiled contracts. It might also be possible that new precompiled contracts are added to the Ethereum main chain in the future, but you can reasonably expect them to always be in the range between <code>1</code> and <code>0xffff</code> (inclusive).</p>
+                        
         <section class="main-section" id="Reference">
             <header>Reference</header>
             <article>
                 <ul>
-                    <li>All the documentation in this page is taken from <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide" target="_blank">MDN</a></li>
+                    <li>All the documentation in this page is taken from <a href="https://docs.soliditylang.org/en/v0.8.14/introduction-to-smart-contracts.html" target="_blank">Solidity</a></li>
                 </ul>
             </article>
         </section>
